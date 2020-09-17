@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name=”applicable-device” content=”pc,mobile”>
+  <title>直播视频在线播放</title>
+  <meta name="keywords" content="mp4,在线">
+  <meta name="description" content="在线播放">
+  <link rel="stylesheet" href="./css/bootstrap.css">
+  <script src="./js/ckplayer/ckplayer.js"></script>
+  
+</head>
+<body class="bg-light">
+<!--头部-->
+<header>
+  <div class="navbar navbar-dark bg-dark shadow-lg">
+    <div class="container d-flex justify-content-between">
+      <a href="/" class="navbar-brand d-flex align-items-center">
+        直播视频在线播放
+      </a>
+    </div>
+  </div>
+</header>
+<!--内容-->
+<main class="">
+  <div class="container">
+    <!--地址栏-->
+    <div class="mt-5 ml-2 mr-2">
+      <!--mp4-->
+      <div class="input-group  mt-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text">MP4</span>
+        </div>
+        <input id="video_url_mp4" type="text" class="form-control" placeholder="video url" aria-label="video url"
+               aria-describedby="playVideo" value="http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4">
+        <div class="input-group-append">
+          <button class="btn btn-primary" onclick="playVideoMp4()">播放</button>
+        </div>
+      </div>
+
+    </div>
+    <!--播放区域-->
+    <div class="mt-3 mb-5">
+      <div id="video" class="w-100 h-50"></div>
+    </div>
+
+    <!--介绍-->
+    <div>
+      <table class="table table-bordered bg-white">
+        <thead>
+        <tr class="align-content-center">
+          <th style="width: 10%">文件格式</th>
+          <th class="text-center">介绍</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+          <td>MP4</td>
+          <td>
+            <p>MP4或称MPEG-4第14部分（英语：MPEG-4 Part
+              14）是一种标准的数字多媒体容器格式。MPEG-4第14部分的扩展名为.mp4，以存储数字音频及数字视频为主，但也可以存储字幕和静止图像。因其可容纳支持比特流的視频流（如高级視频编码），MP4可以在网络传输时使用流式传输。</p>
+            <p>
+              虽然携带式媒体播放器有时会被称作"MP4播放器"，但并不仅限于播放MP4格式的影片，有些也可以播放AMV、MKV或其他影帧式扩展名为.flv或.f4v并同样基于ISO基础媒体文件格式（MPEG-4第12部分）的Flash視频格式与MPEG-4第14部分极为相似，多数情况下直接变更扩展名为.mp4也能够正常播放</p>
+          </td>
+        </tr>
+        
+        
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer class="pt-3 pb-3 mt-5 bg-white">
+  <div class="container text-center">
+    <span>@2020</span>
+  </div>
+</footer>
+
+<script>
+
+    //初始化播放器
+    var videoObject = {
+        container: '#video', //容器的ID或className
+        variable: 'player',//播放函数名称
+        poster: './img/poster.jpg',//封面图片
+        video: "http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4",
+    };
+    var player = new ckplayer(videoObject);
+
+    function changeVideo(videoUrl) {
+        if (player == null) {
+            return;
+        }
+
+        var newVideoObject = {
+            container: '#video', //容器的ID
+            variable: 'player',
+            autoplay: true, //是否自动播放
+            video: videoUrl
+        };
+
+        //判断是需要重新加载播放器还是直接换新地址
+        if (player.playerType == 'html5video') {
+            if (player.getFileExt(videoUrl) == '.flv' || player.getFileExt(videoUrl) == '.m3u8' || player.getFileExt(videoUrl) == '.f4v' || videoUrl.substr(0, 4) == 'rtmp') {
+                player.removeChild();
+
+                player = null;
+                player = new ckplayer();
+                player.embed(newVideoObject);
+            } else {
+                player.newVideo(newVideoObject);
+            }
+        } else {
+            if (player.getFileExt(videoUrl) == '.mp4' || player.getFileExt(videoUrl) == '.webm' || player.getFileExt(videoUrl) == '.ogg') {
+                player = null;
+                player = new ckplayer();
+                player.embed(newVideoObject);
+            } else {
+                player.newVideo(newVideoObject);
+            }
+        }
+    }
+
+    function playVideoMp4() {
+        var videoUrl = document.getElementById('video_url_mp4').value;
+        changeVideo(videoUrl);
+    }
+
+    function playVideoM3u8() {
+        var videoUrl = document.getElementById('video_url_m3u8').value;
+        changeVideo(videoUrl);
+    }
+
+    function playVideoRtmp() {
+        var videoUrl = document.getElementById('video_url_rtmp').value;
+        changeVideo(videoUrl);
+    }
+
+    function playVideoFlv() {
+        var videoUrl = document.getElementById('video_url_flv').value;
+        changeVideo(videoUrl);
+    }
+</script>
+
+</body>
+</html>
